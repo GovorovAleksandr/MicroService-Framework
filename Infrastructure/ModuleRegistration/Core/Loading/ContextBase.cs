@@ -45,6 +45,7 @@ namespace ModuleRegistration.Core
         private void OnDestroy()
         {
             ServiceLocator.DisposeAll();
+            ServiceLocator.Get<IContextRegistryInternal>().TryRemoveLocator(ServiceLocator);
         }
     }
 }

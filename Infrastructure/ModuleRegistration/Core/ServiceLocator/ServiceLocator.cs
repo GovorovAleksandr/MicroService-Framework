@@ -20,6 +20,7 @@ namespace ModuleRegistration.Core
             _parentLocator = parentLocator;
             
             _localServices[typeof(IServiceLocator)] = new ServiceContainer(this, ServiceBindingFlags.Single);
+            
             var serviceInjector = new ServiceInjector(this, _toInject);
             _localServices[typeof(IServiceInjectorInternal)] = new ServiceContainer(serviceInjector, ServiceBindingFlags.Single);
             _localServices[typeof(IServiceInjector)] = new ServiceContainer(serviceInjector, ServiceBindingFlags.Single);

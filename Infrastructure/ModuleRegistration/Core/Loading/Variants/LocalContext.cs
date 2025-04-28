@@ -7,7 +7,7 @@ namespace ModuleRegistration.Core
     internal sealed class LocalContext : ContextBase<ILocalModuleEntry>
     {
         private IServiceLocatorInternal _globalServiceLocator;
-        private IContextRegistry _contextRegistry;
+        private IContextRegistryInternal _contextRegistry;
         
         protected override void PreInitialize()
         {
@@ -15,7 +15,7 @@ namespace ModuleRegistration.Core
             globalContextProvider.Initialize();
             _globalServiceLocator = globalContextProvider.GlobalContext.ServiceLocator;
 
-            if (_globalServiceLocator.TryGet<IContextRegistry>(out var _)) return;
+            if (_globalServiceLocator.TryGet<IContextRegistryInternal>(out _)) return;
             
             _contextRegistry = new ContextRegistry();
             _contextRegistry.RegisterLocator(_globalServiceLocator);
@@ -35,7 +35,7 @@ namespace ModuleRegistration.Core
         protected override IServiceLocatorInternal CreateServiceLocator()
         {
             var serviceLocator = new ServiceLocator(_globalServiceLocator);
-            _globalServiceLocator.Get<IContextRegistry>().RegisterLocator(serviceLocator);
+            _globalServiceLocator.Get<IContextRegistryInternal>().RegisterLocator(serviceLocator);
             return serviceLocator;
         }
         

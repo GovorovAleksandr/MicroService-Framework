@@ -6,6 +6,5 @@ namespace ModuleRegistration.Core
 	public interface IContextRegistry
 	{
 		IEnumerable<IServiceLocator> AllLocators { get; }
-		void RegisterLocator(IServiceLocator locator);
 	}
 }

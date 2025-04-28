@@ -1,0 +1,18 @@
+{
+    "name": "MonoReferencing",
+    "rootNamespace": "MonoReferencing",
+    "references": [
+        "GUID:e9e0d67f9df594affb0bd6b8148c2f55",
+        "GUID:081e411dcfa80419bb601075da9ef0c5",
+        "InternalEvents"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

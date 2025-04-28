@@ -1,0 +1,16 @@
+{
+    "name": "MonoReferencing.Editor",
+    "rootNamespace": "MonoReferencing.Editor",
+    "references": ["GUID:a7e279ea01d7f401ca4e6e4c0f81d0a0"],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

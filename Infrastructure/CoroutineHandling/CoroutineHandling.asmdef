@@ -1,0 +1,21 @@
+{
+    "name": "CoroutineHandling",
+    "rootNamespace": "CoroutineHandling",
+    "references": [
+        "GUID:081e411dcfa80419bb601075da9ef0c5",
+        "GUID:e9e0d67f9df594affb0bd6b8148c2f55",
+        "GUID:a7e279ea01d7f401ca4e6e4c0f81d0a0",
+        "GUID:1cd270abdfb4493888a64d1314d7e0b5",
+        "GUID:924e42acd754e4d57b4f4cff0b9b776a",
+        "GUID:80323a05340a24c8ca00c79c832597c5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

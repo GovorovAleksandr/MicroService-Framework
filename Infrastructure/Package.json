@@ -1,0 +1,10 @@
+{
+  "name": "com.alexandr.microservice-framework",
+  "version": "1.0.0",
+  "displayName": "MicroService Framework",
+  "unity": "2020.3.40",
+  "author": {
+    "name": "Alexandr"
+  }
+}
+

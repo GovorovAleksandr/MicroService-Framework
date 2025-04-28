@@ -1,0 +1,16 @@
+{
+    "name": "ModuleRegistration",
+    "rootNamespace": "ModuleRegistration",
+    "references": [
+        "GUID:e3bbfe13dce44c66bfbbd36d9393fe83"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

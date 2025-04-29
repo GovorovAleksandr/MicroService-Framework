@@ -11,7 +11,7 @@ namespace MonoReferencing.Installers
 
         public void InstallBindings(IServiceLocator serviceLocator)
         {
-            serviceLocator.AddInterfacesFromNew<ReferenceInstaller>();
+            serviceLocator.AddInterfacesFromNew(() => new ReferenceInstaller());
         }
     }
 }

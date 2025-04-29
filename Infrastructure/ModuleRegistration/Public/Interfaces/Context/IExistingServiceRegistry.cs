@@ -8,8 +8,5 @@ namespace ModuleRegistration.Public
 		void AddAll(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag);
 		void AddInterfaces(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag);
 		void AddInstance(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag);
-        
-		void AddAsFromNew<TKey, TInstance>(ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag);
-		void AddAsFromNew(Type keyType, Type serviceType, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag);
 	}
 }

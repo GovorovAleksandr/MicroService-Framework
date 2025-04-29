@@ -18,17 +18,17 @@ namespace DataPersistence.Entry
                 throw new Exception("Not found any file name builder types");
             }
             
-            serviceLocator.AddAllFromNew<DataRepository>();
-            serviceLocator.AddAllFromNew<FilePreserver>();
-            serviceLocator.AddAllFromNew<DefaultFilePersistence>();
-            serviceLocator.AddAllFromNew<JsonDataSerializer>();
+            serviceLocator.AddAllFromNew(() => new DataRepository());
+            serviceLocator.AddAllFromNew(() => new FilePreserver());
+            serviceLocator.AddAllFromNew(() => new DefaultFilePersistence());
+            serviceLocator.AddAllFromNew(() => new JsonDataSerializer());
             
             foreach (var fileNameBuilderType in fileNameBuilderTypes)
             {
-                serviceLocator.AddAllFromNew(fileNameBuilderType, ServiceBindingFlags.Multiple);
+                serviceLocator.AddAllFromNew(fileNameBuilderType, () => Activator.CreateInstance(fileNameBuilderType), ServiceBindingFlags.Multiple);
             }
             
-            serviceLocator.AddAllFromNew<LoadHandler>();
+            serviceLocator.AddAllFromNew(() => new LoadHandler());
         }
     }
 }

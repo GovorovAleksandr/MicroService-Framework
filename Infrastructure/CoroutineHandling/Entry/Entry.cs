@@ -7,11 +7,11 @@ namespace CoroutineHandling.Entry
 	{
 		public void InstallBindings(IServiceLocator serviceLocator)
 		{
-			serviceLocator.AddInterfacesFromNew<CoroutineHandlerProvider>();
-			serviceLocator.AddInterfacesFromNew<CoroutineRegistry>();
+			serviceLocator.AddInterfacesFromNew(() => new CoroutineHandlerProvider());
+			serviceLocator.AddInterfacesFromNew(() => new CoroutineRegistry());
 			
-			serviceLocator.AddInterfacesFromNew<EventHandler>();
-			serviceLocator.AddInterfacesFromNew<RequestHandler>();
+			serviceLocator.AddInterfacesFromNew(() => new EventHandler());
+			serviceLocator.AddInterfacesFromNew(() => new RequestHandler());
 		}
 	}
 }

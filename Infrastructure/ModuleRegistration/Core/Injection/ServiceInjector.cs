@@ -49,10 +49,12 @@ namespace ModuleRegistration.Core
 
                     InjectSingleField(service, field);
 
+                    var locatorName = _locator.AllServices.Count > _locator.Services.Count ? "Local" : "Global";
+                    Debug.Log($"[{locatorName} Injector]: injected [{dependencyType.FullName}] to [{instanceType.FullName}]");
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"Failed to inject {dependencyType.Name} at {instanceType}: {ex}");
+                    Debug.LogError($"Failed to inject {dependencyType.FullName} at {instanceType.FullName}: {ex}");
                 }
             }
         }
@@ -90,7 +92,7 @@ namespace ModuleRegistration.Core
             var serviceContainer = _locator.AllServices.FirstOrDefault(service => dependencyType == service.Key);
             
             if (serviceContainer.Key == null)
-                throw new InvalidOperationException($"Failed to resolve field {dependencyType.Name} in {instanceType.Name}");
+                throw new InvalidOperationException($"Failed to resolve field {dependencyType.FullName} in {instanceType.FullName}");
             
             return serviceContainer.Value;
         }

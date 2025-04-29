@@ -9,7 +9,7 @@ namespace RequestBus.Entry
         
         public void InstallBindings(IServiceLocator serviceLocator)
         {
-            serviceLocator.AddInterfacesFromNew<Core.RequestBus>();
+            serviceLocator.AddInterfacesFromNew(() => new Core.RequestBus());
         }
     }
 }

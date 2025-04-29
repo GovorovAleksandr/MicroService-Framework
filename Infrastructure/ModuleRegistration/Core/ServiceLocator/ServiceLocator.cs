@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ModuleRegistration.Public;
 using ModuleRegistration.Utils;
+using UnityEngine;
 
 namespace ModuleRegistration.Core
 {
@@ -29,15 +30,59 @@ namespace ModuleRegistration.Core
         IDictionary<Type, ServiceContainer> IServiceLocatorInternal.Services => _localServices;
         IDictionary<Type, ServiceContainer> IServiceLocatorInternal.AllServices => GetAllServices();
         
-        public void AddAllFromNew<T>(ServiceBindingFlags flag = Constants.DefaultServiceBindingFlag)
+        public void AddAllFromNew<T>(Func<T> factory, ServiceBindingFlags flag = Constants.DefaultServiceBindingFlag)
         {
-            AddAllFromNew(typeof(T), flag);
+            var service = factory();
+            AddAll(service, flag);
         }
 
-        public void AddAllFromNew(Type keyType, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        public void AddAllFromNew(Type keyType, Func<object> factory, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
         {
-            var service = Activator.CreateInstance(keyType);
+            var service = factory();
+            if (service.GetType() != keyType) throw new Exception($"Factory must return an instance of type {keyType}");
             AddAll(service, flags);
+        }
+
+        public void AddInterfacesFromNew<T>(Func<T> factory, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            var service = factory();
+            AddInterfaces(service, flags);
+        }
+
+        public void AddInterfacesFromNew(Type keyType, Func<object> factory, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            var service = factory();
+            if (service.GetType() != keyType) throw new Exception($"Factory must return an instance of type {keyType}");
+            AddInterfaces(service, flags);
+        }
+
+        public void AddInstanceFromNew<T>(Func<T> factory, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            var keyType = typeof(T);
+            if (!keyType.IsClass && !keyType.IsValueType) throw new Exception("Class or structure must be passed as a parameter T");
+            var service = factory();
+            AddInstance(service, flags);
+        }
+
+        public void AddInstanceFromNew(Type keyType, Func<object> factory, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            var service = factory();
+            if (service.GetType() != keyType) throw new Exception($"Factory must return an instance of type {keyType}");
+            AddInstance(service, flags);
+        }
+
+        public void AddAsFromNew<TKey, TInstance>(Func<TInstance> factory, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            var keyType = typeof(TKey);
+            var service = factory();
+            AddAs(keyType, service, flags);
+        }
+
+        public void AddAsFromNew(Type keyType, Type serviceType, Func<object> factory, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            var service = factory();
+            if (service.GetType() != keyType) throw new Exception($"Factory must return an instance of type {keyType}");
+            AddAs(keyType, service, flags);
         }
 
         public void AddAll(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
@@ -46,67 +91,9 @@ namespace ModuleRegistration.Core
             AddInterfaces(service, flags);
         }
 
-        public void AddAsFromNew<TKey, TInstance>(ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            var keyType = typeof(TKey);
-            var serviceType = typeof(TInstance);
-            AddAsFromNew(keyType, serviceType, flags);
-        }
-
-        public void AddAsFromNew(Type keyType, Type serviceType, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            var instance = Activator.CreateInstance(serviceType);
-            AddAs(keyType, instance, flags);
-        }
-
-        public void AddAs<TKey>(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            var keyType = typeof(TKey);
-            AddAs(keyType, service, flags);
-        }
-
-        public void AddAs(Type keyType, object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            _toInject.Add(service);
-            Add(keyType, service, flags);
-        }
-
-        public void AddInstanceFromNew<T>(ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            var keyType = typeof(T);
-            if (!keyType.IsClass && !keyType.IsValueType) throw new Exception("Class or structure must be passed as a parameter T");
-            AddInstanceFromNew(keyType, flags);
-        }
-
-        public void AddInstanceFromNew(Type keyType, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            var service = Activator.CreateInstance(keyType);
-            AddInstance(service, flags);
-        }
-
-        public void AddInstance(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            _toInject.Add(service);
-            var keyType = service.GetType();
-            Add(keyType, service, flags);
-        }
-
-        public void AddInterfacesFromNew<T>(ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            var keyType = typeof(T);
-            AddInterfacesFromNew(keyType, flags);
-        }
-
-        public void AddInterfacesFromNew(Type keyType, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
-        {
-            var service = Activator.CreateInstance(keyType);
-            AddInterfaces(service, flags);
-        }
-
         public void AddInterfaces(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
         {
             _toInject.Add(service);
-            
             var serviceType = service.GetType();
             
             foreach (var iface in serviceType.GetInterfaces())
@@ -120,6 +107,26 @@ namespace ModuleRegistration.Core
 
                 Add(iface, service, flags);
             }
+        }
+
+        public void AddInstance(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            _toInject.Add(service);
+            var keyType = service.GetType();
+            Add(keyType, service, flags);
+        }
+
+        public void AddAs<TKey>(object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            _toInject.Add(service);
+            var keyType = typeof(TKey);
+            AddAs(keyType, service, flags);
+        }
+
+        public void AddAs(Type keyType, object service, ServiceBindingFlags flags = Constants.DefaultServiceBindingFlag)
+        {
+            _toInject.Add(service);
+            Add(keyType, service, flags);
         }
 
         public T Get<T>()
@@ -215,6 +222,9 @@ namespace ModuleRegistration.Core
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(flags), flags, null);
             }
+            
+            var contextName = _parentLocator == null ? "Global" : "Local";
+            Debug.Log($"[{contextName} Context]: [{service.GetType().FullName}] registered as [{keyType.FullName}]");
         }
 
         private void AddSingleService(Type serviceType, object service)

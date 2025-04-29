@@ -8,7 +8,7 @@ namespace EventBus.Entry
         
         public void InstallBindings(IServiceLocator serviceLocator)
         {
-            serviceLocator.AddInterfacesFromNew<Core.EventBus>();
+            serviceLocator.AddInterfacesFromNew(() => new Core.EventBus());
         }
     }
 }

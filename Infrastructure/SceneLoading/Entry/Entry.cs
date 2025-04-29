@@ -8,14 +8,14 @@ namespace SceneLoading.Entry
 	{
 		public void InstallBindings(IServiceLocator serviceLocator)
 		{
-			serviceLocator.AddInstanceFromNew<SceneLoader>();
+			serviceLocator.AddInstanceFromNew(() => new SceneLoader());
 			
-			serviceLocator.AddInterfacesFromNew<LoadSceneButtonHandler>();
-			serviceLocator.AddInterfacesFromNew<AutoSceneLoadHandler>();
-			serviceLocator.AddInterfacesFromNew<ProgressSliderHandler>();
-			serviceLocator.AddInterfacesFromNew<ConfirmSceneLoadingButtonHandler>();
+			serviceLocator.AddInterfacesFromNew(() => new LoadSceneButtonHandler());
+			serviceLocator.AddInterfacesFromNew(() => new AutoSceneLoadHandler());
+			serviceLocator.AddInterfacesFromNew(() => new ProgressSliderHandler());
+			serviceLocator.AddInterfacesFromNew(() => new ConfirmSceneLoadingButtonHandler());
 			
-			serviceLocator.AddInterfacesFromNew<EventHandler>();
+			serviceLocator.AddInterfacesFromNew(() => new EventHandler());
 		}
 	}
 }

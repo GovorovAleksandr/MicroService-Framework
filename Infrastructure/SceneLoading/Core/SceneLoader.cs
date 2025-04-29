@@ -44,6 +44,7 @@ namespace SceneLoading.Core
 				yield return null;
 			}
 
+			_eventBus.Send(new SceneLoadingProgressChanged(1f));
 			_eventBus.Send(autoConfirm ? new SceneLoaded() : new SceneLoaded(Confirm));
 
 			if (autoConfirm) Confirm();
